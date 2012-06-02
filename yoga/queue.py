@@ -43,17 +43,19 @@ class Bag:
 CREATE TABLE IF NOT EXISTS `%s` (
   pk INTEGER PRIMARY KEY,
   document_type TEXT NOT NULL,
+  text TEXT,
   kwargs JSON NOT NULL
  )''' % self._table_name)
 
-    def add(self, element):
+    def add(self, document):
         dt.insert({
-            u'document_type': element.document_type,
-            u'kwargs': element.kwargs,
+            u'document_type': document.document_type,
+            u'text': document.text,
+            u'kwargs': document.kwargs,
         }, self._table_name)
 
     def pop(self):
-        sql1 = 'SELECT pk, document_type, kwargs FROM `%s` LIMIT 1' % self._table_name
+        sql1 = 'SELECT * FROM `%s` LIMIT 1' % self._table_name
         results = dt.execute(sql1)
         if len(results) == 0:
             return None
@@ -63,16 +65,40 @@ CREATE TABLE IF NOT EXISTS `%s` (
             dt.execute(sql2)
 
             document_class = self._documents_types[document_params['document_type']]
-            document = document_class(**document_params['kwargs'])
+            document = document_class(document_params['text'], **document_params['kwargs'])
             return document
 
-class Queue:
-    def __init__(self, **kwargs):
+class DocumentType:
+    def __init__(self, text = None, **kwargs):
+        self.text = text
         self.kwargs = kwargs
 
     def load(self):
         raise NotImplementedError('You need to implement the load function for this document')
 
-    def parse(self, text):
+    def parse(self):
+        self.text
         raise NotImplementedError('You need to implement the parse function for this document')
 
+    def _go(self):
+        log('')
+        log('-------------------------------------------')
+        log('')
+        log('Processing this %s:' % self.__class__)
+        log(demjson.encode(self.kwargs, compactly = False))
+
+        if self.text == None:
+            log('Retrieving')
+            blob = self.load()
+            if type(blob) not in (str, unicode):
+                raise TypeError('DocumentType.load must return a string.')
+            self.text = blob
+            return self
+
+        else:
+            log('Parsing')
+            childbuckets = self.parse(self.text)
+
+            if childbuckets == None:
+                childbuckets = [] 
+            return childbuckets
