@@ -77,7 +77,6 @@ class DocumentType:
         raise NotImplementedError('You need to implement the load function for this document')
 
     def parse(self):
-        self.text
         raise NotImplementedError('You need to implement the parse function for this document')
 
     def _go(self):
