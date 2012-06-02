@@ -19,3 +19,9 @@ driver.get(url)
 # 100 per page
 option = driver.find_elements_by_xpath('id("ctl00_TemplateBody_ucTeacherDirectory_ddhowmany")/option[@value="100"]')[0]
 option.click()
+
+# Search
+button = driver.find_elements_by_id('ctl00_TemplateBody_ucTeacherDirectory_imgSearch')[0]
+button.click()
+
+driver.find_elements_by_css('#ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory tr td')[0]
