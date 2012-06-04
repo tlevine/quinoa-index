@@ -18,7 +18,16 @@ def _driver_setup():
     driver = webdriver.Remote(desired_capabilities=desired_capabilities,command_executor="http://thomaslevine.com:4444/wd/hub")
     return driver
 
-def _search_setup():
+def main():
+    dt = DumpTruck(dbname='somatic.sqlite')
+    dt.execute('''
+CREATE TABLE IF NOT EXISTS page_source (
+  page_number INTEGER NOT NULL,
+  page_source TEXT NOT NULL,
+  UNIQUE(page_number)
+)''')
+
+    print('Running the search')
     # Get the search page
     driver = _driver_setup()
     driver.get(url)
@@ -31,22 +40,12 @@ def _search_setup():
     button = driver.find_elements_by_id('ctl00_TemplateBody_ucTeacherDirectory_imgSearch')[0]
     button.click()
 
-    return driver
-
-def main():
-    dt = DumpTruck(dbname='somatic.sqlite')
-    dt.execute('''
-CREATE TABLE IF NOT EXISTS page_source (
-  page_number INTEGER NOT NULL,
-  page_source TEXT NOT NULL,
-  UNIQUE(page_number)
-)''')
-
-    print('Running the search')
-    driver = _search_setup()
+    #import pdb; pdb.set_trace()
 
     while True:
         spans = driver.find_elements_by_css_selector('#ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory tr td tr span')
+
+        print [span.text for span in spans]
         if spans[0].text != spans[1].text:
             raise ValueError('Page navigation rows don\'t match.')
 
