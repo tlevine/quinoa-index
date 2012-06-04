@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS page_source (
         randomsleep()
 
         # Current page number
-        page_numbers = driver.find_elements_by_css_selector('#ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory tr td tr span')]
+        page_numbers = driver.find_elements_by_css_selector('#ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory tr td tr span')
 
         # Fast forward to new pages: Ellipsis
         ellipses = driver.find_element_by_xpath('//a[text()="..."]')
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS page_source (
             # If we're not up to this page but the appropriate page is visible,
             # click to the right page.
             print('Skipping a little bit ahead')
-            xpath = 'id("ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory")' +
+            xpath = 'id("ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory")' +\
                 '/descendant::tr/descendant::a[text()="%d"]' % (previous_page_saved + 1)
             a = driver.find_elements_by_xpath(xpath)[0]
             a.click()
