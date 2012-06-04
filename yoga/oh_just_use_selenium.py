@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS page_source (
 
         dt.insert({'page_number': page_number, 'page_source': driver.page_source}, 'page_source')
         try:
-            a = span[0].find_element_by_xpath('../following-sibling::td[position()=1]/a')
+            a = spans[0].find_element_by_xpath('../following-sibling::td[position()=1]/a')
         except NoSuchElementException:
             print('We appear to have reached the end at page %d. Please confirm that this is correct.' % page_number)
             break
