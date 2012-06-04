@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+# Retrieve only the header row and the totals by state
+curl http://www.census.gov/popest/data/state/asrh/2011/files/SC-EST2011-AGESEX-RES.csv|
+  sed -n -e '/,0,999,/p'| grep -v 'United States' > state_raw.csv
+
+sqlite3 population.sqlite < import.sql
+
