@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 from dumptruck import DumpTruck
 from lxml.html import fromstring
 from selenium import webdriver
@@ -7,9 +8,9 @@ from time import sleep
 url = 'https://secure.yogaalliance.org/IMISPublic/Registration/Teachers/teacherdirectory.aspx'
 
 def randomsleep():
-  seconds=normalvariate(9, 3)
-  if seconds>0:
-    sleep(seconds)
+    seconds=normalvariate(9, 3)
+    if seconds>0:
+        sleep(seconds)
 
 def _driver_setup():
     desired_capabilities = webdriver.DesiredCapabilities.FIREFOX
@@ -34,8 +35,14 @@ def _search_setup():
 
 def main():
     dt = DumpTruck(dbname='somatic.sqlite')
-    dt.create_index('page_source', ['page_number'], if_not_exists = True, unique = True)
+    dt.execute('''
+CREATE TABLE IF NOT EXISTS page_source (
+  page_number INTEGER NOT NULL,
+  page_source TEXT NOT NULL,
+  UNIQUE(page_number)
+)''')
 
+    print('Running the search')
     driver = _search_setup()
 
     while True:
@@ -44,6 +51,8 @@ def main():
             raise ValueError('Page navigation rows don\'t match.')
 
         page_number = int(spans[0].text)
+        print('Saving page %d' % page_number)
+
         dt.insert({'page_number': page_number, 'page_source': driver.page_source}, 'page_source')
         try:
             a = span[0].find_element_by_xpath('../following-sibling::td[position()=1]/a')
@@ -52,4 +61,8 @@ def main():
             break
         else:
             a.click()
+
+        print('Pausing for a few seconds')
         randomsleep()
+
+main()
