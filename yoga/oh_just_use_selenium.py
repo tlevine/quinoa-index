@@ -2,6 +2,7 @@
 from dumptruck import DumpTruck
 from lxml.html import fromstring
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from random import normalvariate
 from time import sleep
 
@@ -15,7 +16,7 @@ def randomsleep():
 def _driver_setup():
     desired_capabilities = webdriver.DesiredCapabilities.FIREFOX
     desired_capabilities['name'] = 'Yoga'
-    driver = webdriver.Remote(desired_capabilities=desired_capabilities,command_executor="http://thomaslevine.com:4444/wd/hub")
+    driver = webdriver.Remote(desired_capabilities=desired_capabilities,command_executor="http://localhost:4444/wd/hub")
     return driver
 
 def main():
@@ -40,13 +41,15 @@ CREATE TABLE IF NOT EXISTS page_source (
     button = driver.find_elements_by_id('ctl00_TemplateBody_ucTeacherDirectory_imgSearch')[0]
     button.click()
 
-    #import pdb; pdb.set_trace()
-
     while True:
-        spans = driver.find_elements_by_css_selector('#ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory tr td tr span')
+        print('Pausing for a few seconds to let the page load and be polite')
+        sleep(8)
+        randomsleep()
 
-        print [span.text for span in spans]
-        if spans[0].text != spans[1].text:
+        spans = driver.find_elements_by_css_selector('#ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory tr td tr span')
+        if len(spans) == 1:
+            raise ValueError('Only one navigation row')
+        elif spans[0].text != spans[1].text:
             raise ValueError('Page navigation rows don\'t match.')
 
         page_number = int(spans[0].text)
@@ -60,8 +63,5 @@ CREATE TABLE IF NOT EXISTS page_source (
             break
         else:
             a.click()
-
-        print('Pausing for a few seconds')
-        randomsleep()
 
 main()
