@@ -56,9 +56,12 @@ CREATE TABLE IF NOT EXISTS page_source (
         max_page_numbers = driver.find_elements_by_xpath('//td[a[text()="..."]]/preceding-sibling::td[position()=1]')
 
         for nodes in [page_numbers, ellipses, max_page_numbers]:
+            print(nodes)
             if len(nodes) == 1:
+                import pdb; pdb.set_trace()
                 raise ValueError('Only one navigation row')
             elif nodes[0].text != nodes[1].text:
+                import pdb; pdb.set_trace()
                 raise ValueError('Page navigation rows don\'t match.')
 
         page_number = int(page_numbers[0].text)
