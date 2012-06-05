@@ -20,7 +20,7 @@ def _driver_setup():
     return driver
 
 def main():
-    dt = DumpTruck(dbname='somatic.sqlite')
+    dt = DumpTruck(dbname='yoga.sqlite')
     dt.execute('''
 CREATE TABLE IF NOT EXISTS page_source (
   page_number INTEGER NOT NULL,
