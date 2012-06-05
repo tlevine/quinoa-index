@@ -1,7 +1,27 @@
 from dumptruck import DumpTruck
 from lxml.html import fromstring, tostring
 
-dt = DumpTruck('/tmp/yoga.sqlite') 
+DB = '/tmp/yoga.sqlite'
+SPAN_KEYS = ['LAST_NAME',
+    'FIRST_NAME',
+    'Style',
+    'Designation',
+    'Phone',
+    'Email',
+    'Website',
+    'Address',
+    'City',
+    'State',
+    'Zip',
+    'Country',
+    'Reg',
+    'Languages',
+    'ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory_ctl03_Label2'
+]
+HEADER_KEYS = ['Name', 'Contact', 'Address', 'Registration']
+
+# Open the database
+dt = DumpTruck(DB) 
 
 def parse(page_number):
     sql = 'select page_source from page_source where page_number = %d'
@@ -20,14 +40,16 @@ def _parse_tr(tr):
     "Turn a tr lxml element into a zip"
     spans = tr.cssselect('span')
 
-    if len(spans) != 13:
+    rightnumber = 15
+    if len(spans) != rightnumber:
         print(tostring(tr))
-        raise ValueError('Wrong number of spans')
+        msg = 'Wrong number of spans (%d instead of %d)'
+        params = (len(spans), rightnumber)
+        raise ValueError(msg % params)
 
     print [span.attrib['id'] for span in spans]
     return [_get_span_tuple(span) for span in spans]
 
-KEYS = []
 def _get_span_tuple(span):
     """
     Return a tuple of data key and value for a span inside the table.
@@ -45,6 +67,6 @@ def _get_span_tuple(span):
 
 def _check_header(tr):
     header_tr = tr
-    header = [th.text for th in header_tr.xpath('th')]
-    if keys != ['Name', 'Contact', 'Address', 'Registration']
-        raise ValueError('The header is wrong; it\'s %s' % keys)
+    header_keys = [th.text for th in header_tr.xpath('th')]
+    if header_keys != HEADER_KEYS:
+        raise ValueError('The header is wrong; it\'s %s' % header_keys)
