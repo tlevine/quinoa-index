@@ -70,8 +70,8 @@ def parse(page_number):
 
     return d
 
-def _schema(data_row)
-    dt.create_table(data_row, 'teacher', if_not_exists = True)
+def _schema(data_row):
+    dt.create_table(data_row, 'teacher', if_not_exists = True, structure=zip)
 
     dt.create_index('teacher', ['City'])
     dt.create_index('teacher', ['State'])
