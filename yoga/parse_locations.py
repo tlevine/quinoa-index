@@ -19,6 +19,14 @@ SPAN_KEYS = ['LAST_NAME',
     'ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory_ctl03_Label2'
 ]
 HEADER_KEYS = ['Name', 'Contact', 'Address', 'Registration']
+STATES = [
+    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+]
+  
 
 # Open the database
 dt = DumpTruck(DB) 
@@ -33,8 +41,45 @@ def parse(page_number):
     # Remove the header, check it, and don't use it.
     _check_header(trs.pop(0))
 
+    # Schema
+    _schema(_parse_tr(trs[0]))
+
     # Body
-    d = _parse_tr(trs[0])
+    d = [dict(_parse_tr(tr)) for tr in trs]
+
+    # Clean and check
+    for row in d:
+        if row['State'] not in STATES:
+            raise ValueError('This is an odd state: %s.' % row['State'])
+
+        # Remove trailing hyphens
+        if row['Zip'][-1] == '-':
+            row['Zip'] = row['Zip'][0:-1]
+
+        # Check that it's five long
+        if len(row) != 5:
+            raise ValueError('Zip code %s is not five characters long.' % row['Zip'])
+
+        # Check that it's five _digits_
+        for digit in row:
+            int(digit)
+
+        # Country should be 'USA'
+        if row['Country'] != 'USA':
+            raise ValueError('Wrong country: %s' % row['Country'])
+
+    return d
+
+def _schema(data_row)
+    dt.create_table(data_row, 'teacher', if_not_exists = True)
+
+    dt.create_index('teacher', ['City'])
+    dt.create_index('teacher', ['State'])
+    dt.create_index('teacher', ['Zip'])
+    dt.create_index('teacher', ['Style'])
+
+    # Not country because they're all USA
+    # dt.create_index('teacher', ['Country'])
 
 def _parse_tr(tr):
     "Turn a tr lxml element into a zip"
@@ -47,7 +92,6 @@ def _parse_tr(tr):
         params = (len(spans), rightnumber)
         raise ValueError(msg % params)
 
-    print [span.attrib['id'] for span in spans]
     return [_get_span_tuple(span) for span in spans]
 
 def _get_span_tuple(span):
@@ -56,7 +100,7 @@ def _get_span_tuple(span):
     Before returning, check that the key is valid.
     """
     key = span.attrib['id'].split('_lbl')[-1]
-    if key not in KEYS:
+    if key not in SPAN_KEYS:
         raise ValueError('Key %s is not among the expected keys.' % key)
 
     # .text_content rather than .text in case one of them is weird.
