@@ -1,5 +1,7 @@
-from dumptruck import DumpTruck
+from collections import OrderedDict
+import re
 from lxml.html import fromstring, tostring
+from dumptruck import DumpTruck
 
 DB = '/tmp/yoga.sqlite'
 SPAN_KEYS = ['LAST_NAME',
@@ -16,20 +18,31 @@ SPAN_KEYS = ['LAST_NAME',
     'Country',
     'Reg',
     'Languages',
-    'ctl00_TemplateBody_ucTeacherDirectory_gvTeacherDirectory_ctl03_Label2'
+    'Label2',
 ]
 HEADER_KEYS = ['Name', 'Contact', 'Address', 'Registration']
 STATES = [
+    # States
     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
     'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
     'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
     'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+
+    # Other territories
+    'DC',
 ]
   
 
 # Open the database
 dt = DumpTruck(DB) 
+
+def main():
+    query = dt.execute('select page_number from page_source')
+    page_numbers = [row['page_number'] for row in query]
+    for page_number in page_numbers:
+        d = parse(page_number)
+        break
 
 def parse(page_number):
     sql = 'select page_source from page_source where page_number = %d'
@@ -40,10 +53,10 @@ def parse(page_number):
 
     # Remove the header, check it, and don't use it.
     _check_header(trs.pop(0))
-
+ 
     # Schema
     _schema(_parse_tr(trs[0]))
-
+ 
     # Body
     d = [dict(_parse_tr(tr)) for tr in trs]
 
@@ -52,17 +65,7 @@ def parse(page_number):
         if row['State'] not in STATES:
             raise ValueError('This is an odd state: %s.' % row['State'])
 
-        # Remove trailing hyphens
-        if row['Zip'][-1] == '-':
-            row['Zip'] = row['Zip'][0:-1]
-
-        # Check that it's five long
-        if len(row) != 5:
-            raise ValueError('Zip code %s is not five characters long.' % row['Zip'])
-
-        # Check that it's five _digits_
-        for digit in row:
-            int(digit)
+        row['Zip'] = _clean_zip_code(row['Zip'])
 
         # Country should be 'USA'
         if row['Country'] != 'USA':
@@ -70,8 +73,36 @@ def parse(page_number):
 
     return d
 
+def _clean_zip_code(zipcode):
+    if zipcode == u'':
+        return None
+
+    # Remove trailing hyphens from zip code.
+    if zipcode[-1] == '-':
+        zipcode = zipcode[0:-1]
+
+    # It should be five characters long.
+    if len(zipcode) == 5:
+        pass
+
+    # Or it should be ten characters, with the sixth being a hyphen.
+    elif len(zipcode) == 10 and zipcode[5] == '-':
+        pass
+
+    # If it isn't raise an error.
+    else:
+        raise ValueError('%s doesn\'t look like a zip code.' % zipcode)
+
+    # Check that it's five _digits_
+    for i, digit in enumerate(zipcode):
+        if i == 5 and digit == '-':
+            pass
+        else:
+            int(digit)
+    return zipcode
+
 def _schema(data_row):
-    dt.create_table(data_row, 'teacher', if_not_exists = True, structure=zip)
+    dt.create_table(data_row, 'teacher', if_not_exists = True)
 
     dt.create_index(['City'], 'teacher')
     dt.create_index(['State'], 'teacher')
@@ -82,7 +113,7 @@ def _schema(data_row):
     # dt.create_index('teacher', ['Country'])
 
 def _parse_tr(tr):
-    "Turn a tr lxml element into a zip"
+    "Turn a tr lxml element into an OrderedDict"
     spans = tr.cssselect('span')
 
     rightnumber = 15
@@ -92,14 +123,19 @@ def _parse_tr(tr):
         params = (len(spans), rightnumber)
         raise ValueError(msg % params)
 
-    return [_get_span_tuple(span) for span in spans]
+    return OrderedDict([_get_span_tuple(span) for span in spans])
 
 def _get_span_tuple(span):
     """
     Return a tuple of data key and value for a span inside the table.
     Before returning, check that the key is valid.
     """
-    key = span.attrib['id'].split('_lbl')[-1]
+    id = span.attrib['id']
+    if '_lbl' in id:
+        key = id.split('_lbl')[-1]
+    else:
+        key = re.split(r'_ctl\d{2,3}_', id)[-1]
+
     if key not in SPAN_KEYS:
         raise ValueError('Key %s is not among the expected keys.' % key)
 
@@ -107,10 +143,19 @@ def _get_span_tuple(span):
     # links, inside of a tags, are an example of such weirdness.
     value = span.text_content()
 
-    return (key, value)
+    return (unicode(key), unicode(value))
 
 def _check_header(tr):
     header_tr = tr
     header_keys = [th.text for th in header_tr.xpath('th')]
     if header_keys != HEADER_KEYS:
         raise ValueError('The header is wrong; it\'s %s' % header_keys)
+
+if __name__ == '__main__':
+    main()
+
+#   except Exception, msg:
+#       print "Error on page %d" % page_number
+#       d = OrderedDict([('page_number', page_number), ('message', unicode(msg))])
+#       dt.insert(d, 'errors')
+#       return
