@@ -73,10 +73,10 @@ def parse(page_number):
 def _schema(data_row):
     dt.create_table(data_row, 'teacher', if_not_exists = True, structure=zip)
 
-    dt.create_index('teacher', ['City'])
-    dt.create_index('teacher', ['State'])
-    dt.create_index('teacher', ['Zip'])
-    dt.create_index('teacher', ['Style'])
+    dt.create_index(['City'], 'teacher')
+    dt.create_index(['State'], 'teacher')
+    dt.create_index(['Zip'], 'teacher')
+    dt.create_index(['Style'], 'teacher')
 
     # Not country because they're all USA
     # dt.create_index('teacher', ['Country'])
