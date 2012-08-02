@@ -21,8 +21,9 @@ def main():
                     'teacher_url': link,
                 })
     dt.create_table(data[0], 'alexander_teachers')
-    dt.create_index('alexander_teachers',
+    dt.create_index(
         ['state', 'city', 'teacher_url'],
+        'alexander_teachers',
         unique = True, if_not_exists = True,
     )
     dt.insert(data, 'alexander_teachers')
