@@ -1,0 +1,7 @@
+if [ -d collect/yoga ]
+  then
+  export PATH="$PATH:$PWD/bin"
+  export QUINOA_ROOT="$PWD"
+else
+  echo This must be run from the quinoa root directory
+fi
