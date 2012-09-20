@@ -3,5 +3,5 @@
 (
   cd "$QUINOA_ROOT"/collect/population
   ./import
-  mv population.sqlite ../../data
+  mv population.sqlite ../../data/state.db
 )
