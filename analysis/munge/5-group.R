@@ -17,11 +17,5 @@ aff.grouped <- ddply(aff, 'zip', function(df){
 })
 
 yoga.grouped <- ddply(yoga, 'zip', function(df){
-  yoga.teachers <- nrow(df)
-
-  if (is.na(yoga.teachers)) {
-    0
-  } else {
-    yoga.teachers
-  }
+  c(yoga.teachers = nrow(df))
 })
