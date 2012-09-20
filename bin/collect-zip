@@ -1,0 +1,6 @@
+#!/bin/sh
+
+(
+  cd collect/american-fact-finder
+  ./standardize-sampling-unit.sh > ../../data/aff.csv
+)

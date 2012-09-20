@@ -4,7 +4,7 @@ import re
 from lxml.html import fromstring, tostring
 from dumptruck import DumpTruck
 
-DB = '/tmp/yoga.sqlite'
+DB = '/tmp/yoga.db'
 SPAN_KEYS = ['LAST_NAME',
     'FIRST_NAME',
     'Style',

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+(
+  cd collect/yoga
+
+  # Selenium must be running for this.
+  ./oh_just_use_selenium.py
+
+  # Selenium doesn't need to be running
+  ./parse_locations.py
+
+  cp /tmp/yoga.db ../../data
+)

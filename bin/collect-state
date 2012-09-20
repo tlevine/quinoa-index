@@ -1,5 +1,7 @@
 #!/bin/sh
+
 (
   cd collect/population
   ./import
+  mv population.sqlite ../../data
 )
