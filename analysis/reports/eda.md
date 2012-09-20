@@ -3,6 +3,7 @@ based on yoga teachers per capita.
 
 * [Carmel-by-Sea, CA, 93921](http://en.wikipedia.org/wiki/Carmel-by-the-Sea,_California)
     (walkscore: [94](http://www.walkscore.com/score/93921))
+    looks really interesting.
 * [Aspen, CO, 81612](http://en.wikipedia.org/wiki/Aspen,_Colorado)
     (walkscore: [0](http://www.walkscore.com/score/81611))
 
