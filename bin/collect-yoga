@@ -1,12 +1,14 @@
 #!/bin/sh
+set -e
 
 (
   cd "$QUINOA_ROOT"/collect/yoga
 
   # Selenium must be running for this.
-  ./oh_just_use_selenium.py
+  [ -e sources.db ] || ./oh_just_use_selenium.py
 
   # Selenium doesn't need to be running
+  cp sources.db /tmp/yoga.db
   ./parse_locations.py
 
   cp /tmp/yoga.db ../../data
