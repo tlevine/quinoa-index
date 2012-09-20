@@ -1,0 +1,11 @@
+GCT-P2
+Age Groups and Sex:  2010 - State -- 5-digit ZIP Code Tabulation Area
+
+NOTE: For information on confidentiality protection, nonsampling error, and definitions, see  http://www.census.gov/prod/cen2010/doc/sf1.pdf.
+
+X Not applicable.
+
+Source: U.S. Census Bureau, 2010 Census.
+
+2010 Census Summary File 1,  Tables P12 and P13.
+
