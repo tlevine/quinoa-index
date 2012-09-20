@@ -12,9 +12,15 @@ based on yoga teachers per capita.
 
 * [Erwinna, Pennsylvania, 18920](http://en.wikipedia.org/wiki/Erwinna,_Pennsylvania)
     (walkscore: [2](http://www.walkscore.com/score/18920))
-* [Oxnard, California, ](http://en.wikipedia.org/wiki/Oxnard,_California)
-    (walkscore: [](http://www.walkscore.com/score/))
+* [Oxnard, California, 93030](http://en.wikipedia.org/wiki/Oxnard,_California)
+    (walkscore: [69](http://www.walkscore.com/score/93030))
 * [Sylvester, Georgia, 31791)](http://en.wikipedia.org/wiki/Sylvester,_Georgia)
     (walkscore: [0](http://www.walkscore.com/score/31791))
 * [Frederick, Maryland, )](http://en.wikipedia.org/wiki/Frederick,_Maryland)
     (walkscore: [](http://www.walkscore.com/score/))
+
+* [Carpinteria, California, 93013](http://en.wikipedia.org/wiki/Carpinteria,_California)
+    (walkscore: [0](http://www.walkscore.com/score/93013))
+
+I think a cool place has high yoga teachers, high walk scores, low farms and
+high *nearby* CCOF and NOP operators.

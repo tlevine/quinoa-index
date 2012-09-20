@@ -16,7 +16,7 @@ divide.by.zero <- function(a,b){
 yoga.top.1 <- quinoa[order(quinoa$yoga.teachers / quinoa$pop, decreasing = T),][1:100,]
 print(yoga.top.1[1:5,])
 
-yoga.top.2 <- subset(quinoa[order(quinoa$yoga.teachers / quinoa$pop, decreasing = T),],yoga.teachers > 1)[1:10,]
+yoga.top.2 <- subset(quinoa[order(quinoa$yoga.teachers / quinoa$pop, decreasing = T),],yoga.teachers > 1)[1:100,]
 print(yoga.top.2[1:5,])
 
 ccof.top <- quinoa[order(quinoa$ccof.operators, decreasing = T),][1:100,]
