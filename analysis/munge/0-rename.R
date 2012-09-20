@@ -1,0 +1,2 @@
+yoga <- dumptruck
+rm(dumptruck)
