@@ -1,0 +1,6 @@
+#!/bin/sh
+
+(
+  cd "$QUINOA_ROOT"
+  java -jar collect/selenium-server-standalone-2.21.0.jar
+)
