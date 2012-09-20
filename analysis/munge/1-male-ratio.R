@@ -1,6 +1,6 @@
 aff$portion.female <- (function(){
   # Dunno what the difference is, so let's take a mean.
-  males.per.female <- mean(aff$Males.per.100.females, aff$Males.per.100.females.1)/100
+  males.per.female <- rowMeans(aff[c('Males.per.100.females', 'Males.per.100.females.1')])/100
 
   # Then turn it into a proportion
   portion.male <- males.per.female / (males.per.female + 1)
