@@ -19,3 +19,11 @@ aff.grouped <- ddply(aff, 'zip', function(df){
 yoga.grouped <- ddply(yoga, 'zip', function(df){
   c(yoga.teachers = nrow(df))
 })
+
+nop.grouped <- ddply(nop, 'zip', function(df){
+  c(nop.operators = nrow(df))
+})
+
+ccof.grouped <- ddply(ccof, 'zip', function(df){
+  c(ccof.operators = nrow(df))
+})
