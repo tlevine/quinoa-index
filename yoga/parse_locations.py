@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from collections import OrderedDict
 import re
 from lxml.html import fromstring, tostring
@@ -30,7 +31,7 @@ STATES = [
     'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
 
     # Other territories
-    'DC',
+    'DC', 'INTL',
 ]
   
 
@@ -42,7 +43,7 @@ def main():
     page_numbers = [row['page_number'] for row in query]
     for page_number in page_numbers:
         d = parse(page_number)
-        break
+        dt.insert(d)
 
 def parse(page_number):
     sql = 'select page_source from page_source where page_number = %d'
@@ -62,14 +63,29 @@ def parse(page_number):
 
     # Clean and check
     for row in d:
-        if row['State'] not in STATES:
-            raise ValueError('This is an odd state: %s.' % row['State'])
 
-        row['Zip'] = _clean_zip_code(row['Zip'])
-
-        # Country should be 'USA'
-        if row['Country'] != 'USA':
-            raise ValueError('Wrong country: %s' % row['Country'])
+        row['Errors'] = u''
+        # Ugh. Replace this with withs or something.
+        try:
+            if row['State'] not in STATES:
+                raise ValueError('This is an odd state: %s.' % row['State'])
+        except ValueError, msg:
+            row['State'] = u''
+            row['Errors'] += unicode(msg) + u'\n'
+ 
+        try:
+            row['Zip'] = _clean_zip_code(row['Zip'])
+        except ValueError, msg:
+            row['Zip'] = u''
+            row['Errors'] += unicode(msg) + u'\n'
+ 
+        try:
+            # Country should be 'USA'
+            if row['Country'] != 'USA':
+                raise ValueError('Wrong country: %s' % row['Country'])
+        except ValueError, msg:
+            row['Country'] = u''
+            row['Errors'] += unicode(msg) + u'\n'
 
     return d
 
@@ -102,6 +118,7 @@ def _clean_zip_code(zipcode):
     return zipcode
 
 def _schema(data_row):
+    data_row['Errors'] = u''
     dt.create_table(data_row, 'teacher', if_not_exists = True)
 
     dt.create_index(['City'], 'teacher')
@@ -153,9 +170,3 @@ def _check_header(tr):
 
 if __name__ == '__main__':
     main()
-
-#   except Exception, msg:
-#       print "Error on page %d" % page_number
-#       d = OrderedDict([('page_number', page_number), ('message', unicode(msg))])
-#       dt.insert(d, 'errors')
-#       return
