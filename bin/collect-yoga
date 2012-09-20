@@ -1,7 +1,7 @@
 #!/bin/sh
 
 (
-  cd collect/yoga
+  cd "$QUINOA_ROOT"/collect/yoga
 
   # Selenium must be running for this.
   ./oh_just_use_selenium.py

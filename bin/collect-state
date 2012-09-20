@@ -1,7 +1,7 @@
 #!/bin/sh
 
 (
-  cd collect/population
+  cd "$QUINOA_ROOT"/collect/population
   ./import
   mv population.sqlite ../../data
 )
