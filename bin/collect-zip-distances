@@ -1,0 +1,8 @@
+#!/bin/sh
+
+(
+  cd "$QUINOA_ROOT"/data
+
+  echo state_num,zip,state,city,lng,lat,dunno1,dunno2 > distances.csv
+  wget -O - http://www.census.gov/tiger/tms/gazetteer/zips.txt >> distances.csv
+)
