@@ -3,4 +3,7 @@ quinoa <- join(
   join(ccof.grouped, nop.grouped, by = 'zip'),
   by = 'zip'
 )
-quinoa$yoga.teachers[is.na(quinoa$yoga.teachers)] <- 0
+
+for (var in c('yoga.teachers', 'ccof.operators', 'nop.operators')) {
+  quinoa[,var][is.na(quinoa[,var])] <- 0
+}
