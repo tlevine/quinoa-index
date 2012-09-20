@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+# Collect datasets that are on ScraperWiki
+
+(
+  cd "$QUINOA_ROOT"/data
+
+  # http://www.ccof.org/directories.php
+  wget -O ccof.db https://scraperwiki.com/scrapers/export_sqlite/ccof_directory/
+
+  # http://apps.ams.usda.gov/nop/  
+  wget -O usda_nop.db https://scraperwiki.com/scrapers/export_sqlite/usda_nop_certified_operators/
+)
