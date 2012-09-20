@@ -7,5 +7,8 @@ for (dataset in project.info$data)
   print(head(get(dataset)))
 }
 
-yoga.top.100 <- quinoa[order(quinoa$yoga.teachers.per.capita, decreasing = T),][1:100,]
-print(yoga.top.100[1:5,])
+yoga.top.1 <- quinoa[order(quinoa$yoga.teachers.per.capita, decreasing = T),][1:100,]
+print(yoga.top.1[1:5,])
+
+yoga.top.2 <- subset(quinoa[order(quinoa$yoga.teachers.per.capita, decreasing = T),],yoga.teachers > 1)[1:10,]
+print(yoga.top.2[1:5,])
