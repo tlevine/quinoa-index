@@ -1,5 +1,5 @@
 #!/bin/sh
 (
-  cd population
+  cd collect/population
   ./import
 )

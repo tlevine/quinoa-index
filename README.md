@@ -1,4 +1,4 @@
-somatic-eduction-per-capita
+Quinoa index
 ===========================
 
 ## Running the Yoga script
