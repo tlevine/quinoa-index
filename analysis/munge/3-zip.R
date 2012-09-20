@@ -1,5 +1,5 @@
 get.zip.code <- function(messy.zip) {
-  sub('[^0-9]*([0-9]{5}).*', '\\1', messey.zip)
+  sub('[^0-9]*([0-9]{5}).*', '\\1', messy.zip)
 }
 
 # Get the zip code
