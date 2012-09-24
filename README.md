@@ -1,6 +1,8 @@
 Quinoa index
 ===========================
 
+The Quinoa index combines strange properties of municipalities in order to find peculiar municipalities.
+
 ## Running the Yoga script
 Start selenium.
 
