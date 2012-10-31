@@ -21,3 +21,7 @@ Results will be in `/tmp/yoga.sqlite`; move that wherever you want to keep it.
 
 ## American FactFinder
 I downloaded that stuff from [here](http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=DEC_10_SF1_GCTP2.ST09&prodType=table).
+
+## More ideas
+
+* [Ikaria](http://www.nytimes.com/2012/10/28/magazine/the-island-where-people-forget-to-die.html)
