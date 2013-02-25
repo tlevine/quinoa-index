@@ -1,9 +1,7 @@
 #!/usr/bin/env python2
 import json
 
-f = open('county.json')
-county = json.load(f)
-f.close()
-del(f)
+county_shapes = json.load(open('county-shapes.json'))
+county_results = json.load(open('county-results.json'))
 
-# county['objects']['president']
+#county['objects']['president'][county_shape['objects'][0]['pr']['f']]
