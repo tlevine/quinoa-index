@@ -25,3 +25,5 @@ I downloaded that stuff from [here](http://factfinder2.census.gov/faces/tableser
 ## More ideas
 
 * [Ikaria](http://www.nytimes.com/2012/10/28/magazine/the-island-where-people-forget-to-die.html)
+* County-level election data might say something; the cool places I know of vote democrat.
+    This might be quite correlated with urbanness.
