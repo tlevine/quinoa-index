@@ -24,7 +24,32 @@ I downloaded that stuff from [here](http://factfinder2.census.gov/faces/tableser
 
 ## More ideas
 
-* [Ikaria](http://www.nytimes.com/2012/10/28/magazine/the-island-where-people-forget-to-die.html)
+Inspiration
+
+* Collect both hip things and non-hip things.
+* Places
+  * [Ikaria](http://www.nytimes.com/2012/10/28/magazine/the-island-where-people-forget-to-die.html)
+  * Ashville, NC
+  * Ithaca, NY
+  * Williamsburg
+* Transportation
+  * Bicycle usage
+  * Car usage
+  * Speed limits
+* Shapefiles
+* Census data
+* Presence of groups like PLoTS, CfA, Awesome, &c.
+
+Specific ideas
+
+* [Walkscore](http://www.walkscore.com/professional/research.php)
 * County-level election data might say something; the cool places I know of vote democrat.
     This might be quite correlated with urbanness.
-* [Walkscore](http://www.walkscore.com/professional/research.php)
+* Suburu dealerships
+* Food
+  * Cafes
+  * McDonalds, Pizza Hut, &c.
+  * Organic producers, food cooperatives, &c.
+* University locations
+* Water quality
+* Air quality
